@@ -149,7 +149,7 @@ def display_esg_criteria_and_sectors(top_stocks, weights):
 # Streamlit Interface
 st.title("📊 Portefeuille Durable avec ESG 🌿")
 
-filepath = "DataSansFormules.xlsx"
+filepath = "data_SPX_SXXP.xlsx"
 esg_data, prices = load_and_clean_data(filepath)
 
 metrics_df = calculate_metrics(prices)
