@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
@@ -110,10 +111,11 @@ def backtest_performance(portfolio_prices, weights):
     metrics = {
         'Rendement annualisé (%)': annualized_return * 100,
         'Volatilité annualisée (%)': annualized_volatility * 100,
-        'Sharpe Ratio': sharpe_ratio
+        'Sharpe Ratio': sharpe_ratio,
+        'Max Drawdown (%)':(cumulative_returns / cumulative_returns.cummax() - 1).min()*100
     }
 
-    return cumulative_returns, metrics
+    return portfolio_returns, cumulative_returns, metrics
 
 
 # Fonction pour afficher les critères ESG du portefeuille et les secteurs des entreprises sélectionnées
@@ -146,6 +148,45 @@ def display_esg_criteria_and_sectors(top_stocks, weights):
     # Affichage dans un tableau
     st.dataframe(display_df.reset_index(drop=True), use_container_width=True)
 
+
+def display_visualizations(top_stocks, weights):
+    st.subheader("📊 Visualisations du portefeuille")
+
+    # Aligner les index
+    top_stocks = top_stocks.set_index('Ticker').loc[weights.index].copy()
+    top_stocks['Poids'] = weights
+
+    # --- Répartition sectorielle et géographique côte à côte ---
+    st.markdown("### Répartition sectorielle et géographique")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        sector_weights = top_stocks.groupby('GICS_SECTOR_NAME')['Poids'].sum().sort_values(ascending=False)
+        fig1, ax1 = plt.subplots(figsize=(3.5, 3.5))  # plus compact
+        ax1.pie(sector_weights, labels=sector_weights.index, autopct='%1.1f%%', startangle=90)
+        ax1.axis('equal')
+        st.pyplot(fig1)
+
+    with col2:
+        geo_weights = top_stocks.groupby('Marché')['Poids'].sum().sort_values(ascending=False)
+        fig2, ax2 = plt.subplots(figsize=(3.5, 3.5))  # idem
+        ax2.pie(geo_weights, labels=geo_weights.index, autopct='%1.1f%%', startangle=90)
+        ax2.axis('equal')
+        st.pyplot(fig2)
+
+    # --- Score ESG pondéré par entreprise ---
+    st.markdown("### Score ESG pondéré par entreprise")
+    fig3, ax3 = plt.subplots(figsize=(8, 4))
+    weighted_scores = top_stocks['ESG_SCORE'] * top_stocks['Poids']
+    weighted_scores.index = top_stocks['NAME']
+    weighted_scores.sort_values(ascending=False).plot(kind='bar', ax=ax3, color='green')
+    ax3.set_ylabel("Score ESG pondéré")
+    ax3.set_title("Score ESG pondéré par titre")
+    ax3.set_xticklabels(ax3.get_xticklabels(), rotation=45, ha='right')  
+    st.pyplot(fig3)
+
+
 # Streamlit Interface
 st.title("📊 Portefeuille Durable avec ESG 🌿")
 
@@ -153,7 +194,6 @@ filepath = "data_SPX_SXXP.xlsx"
 esg_data, prices = load_and_clean_data(filepath)
 
 metrics_df = calculate_metrics(prices)
-
 
 
 thematic_column_map = {
@@ -250,9 +290,6 @@ with st.sidebar:
     vol_max = st.slider('Volatilité annuelle max (%)', 5.0, 50.0, 30.0) / 100
 
     st.header('Pondérations ⚖️')
-    #w_esg = st.slider('ESG', 0.0, 1.0, 0.4)
-    #w_return = st.slider('Rendement', 0.0, 1.0, 0.4)
-    #w_vol = st.slider('Volatilité', 0.0, 1.0, 0.2)
 
     # L'utilisateur choisit quel critère il veut "fixer"
     fixed_choice = st.selectbox("Critère à fixer", ["ESG", "Rendement", "Volatilité"])
@@ -301,15 +338,28 @@ weights_config = {
     'w_vol': w_vol
     }
 
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+
 filtered_stocks = filter_stocks(esg_data, metrics_df, filters, thematic_column_map)
 if not filtered_stocks.empty:
     portfolio_prices, weights, top_stocks = build_portfolio(filtered_stocks, prices, weights_config, start_date, end_date, selected_column)
     st.markdown(f"🧠 Construction du portefeuille optimisé selon le critère : **{selected_theme}**")
 
-    cumulative_returns, metrics = backtest_performance(portfolio_prices, weights)
+    portfolio_returns, cumulative_returns, metrics = backtest_performance(portfolio_prices, weights)
     # Affichage du portefeuille
     st.subheader("📈 Performance du portefeuille")
     st.line_chart(cumulative_returns)
+
+    rolling_vol = portfolio_returns.rolling(window=21).std() * np.sqrt(252)
+    st.subheader("Volatilité glissante (21 jours)")
+    st.line_chart(rolling_vol)
+
+    st.subheader("📉 Drawdown (Max Perte Relative)")
+    st.line_chart(cumulative_returns / cumulative_returns.cummax() - 1)
 
     st.subheader("📊 Métriques de performance")
     for k, v in metrics.items():
@@ -317,6 +367,6 @@ if not filtered_stocks.empty:
 
     # Affichage ESG et secteurs
     display_esg_criteria_and_sectors(top_stocks, weights)
-
+    display_visualizations(top_stocks, weights)
 else:
     st.warning("Aucune entreprise ne correspond aux critères sélectionnés.")
