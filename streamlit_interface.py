@@ -30,12 +30,12 @@ st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 col1, col2 = st.columns([1, 5])
 
 with col1:
-    st.markdown("<div style='padding-top: 35px;'>", unsafe_allow_html=True)  # Ajuste ce padding si besoin
+    st.markdown("<div style='padding-top: 50px;'>", unsafe_allow_html=True)  # Ajuste ce padding si besoin
     st.image("logo.jpeg", width=100)
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col2:
-    st.title("🌱 Bienvenue sur GreenVest")
+    st.title("Bienvenue sur GreenVest")
     st.markdown("""
     GreenVest est la plateforme de Green Capital dédiée à l'investissement durable.
 
