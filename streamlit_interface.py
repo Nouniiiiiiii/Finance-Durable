@@ -6,6 +6,25 @@ import io
 import os
 import plotly.graph_objects as go 
 
+# 🌿 Thème vert clair harmonisé
+plt.style.use("default")
+plt.rcParams.update({
+    "axes.facecolor": "#f4f9f4",        # fond du plot
+    "figure.facecolor": "#f4f9f4",      # fond global
+    "axes.edgecolor": "#4CAF50",        # contour axes
+    "axes.labelcolor": "#1b1b1b",       # label axes
+    "xtick.color": "#1b1b1b",
+    "ytick.color": "#1b1b1b",
+    "text.color": "#1b1b1b",            # texte général
+    "axes.titleweight": "bold",
+    "axes.titlesize": 14,
+    "axes.labelsize": 12,
+    "lines.color": "#4CAF50",           # ligne principale
+    "lines.linewidth": 2,
+    "grid.color": "#e0e0e0",
+    "grid.linestyle": "--",
+    "grid.alpha": 0.5
+})
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
 # Intro
