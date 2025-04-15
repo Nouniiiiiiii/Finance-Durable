@@ -210,9 +210,16 @@ def display_visualizations(top_stocks, weights):
 
     # Palette GreenVest (du clair au foncé)
     green_palette = [
-        "#f4f9f4", "#e1f3e1", "#a5d6a7",
-        "#81c784", "#66bb6a", "#4caf50", "#388e3c"
+        "#e0f2f1",  # vert très clair
+        "#a5d6a7",  # vert doux
+        "#81c784",  # vert moyen
+        "#66bb6a",  # vert principal
+        "#4caf50",  # vert fort
+        "#388e3c",  # vert foncé
+        "#2e7d32",  # très foncé
+        "#1b5e20",  # profond
     ]
+
 
     # Aligner les index
     top_stocks = top_stocks.set_index('Ticker').loc[weights.index].copy()
