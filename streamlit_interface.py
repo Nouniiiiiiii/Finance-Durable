@@ -385,7 +385,7 @@ if not filtered_stocks.empty:
     portfolio_returns, cumulative_returns, metrics = backtest_performance(portfolio_prices, weights)
     # 📈 Performance du portefeuille
     st.subheader("📈 Performance du portefeuille")
-    st.line_chart(cumulative_returns, color="green")
+    st.line_chart(cumulative_returns, color=["green"])
 
     rolling_vol = portfolio_returns.rolling(window=21).std() * np.sqrt(252)
     st.subheader("Volatilité glissante (21 jours)")
