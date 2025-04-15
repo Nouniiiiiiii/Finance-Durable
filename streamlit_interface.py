@@ -7,6 +7,24 @@ import os
 
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
+# Intro
+st.title("🌱 Bienvenue sur GreenVest")
+st.markdown("""
+GreenVest est la plateforme de Green Capital dédiée à l'investissement durable.
+
+Créez un portefeuille aligné avec vos valeurs en priorisant des critères ESG (Environnement, Social, Gouvernance), en excluant certaines industries, et en personnalisant vos préférences de performance.
+
+Téléchargez ou visualisez notre flyer pour en savoir plus sur notre vision de la finance durable :
+""")
+
+# Affichage du flyer
+with open("Flyer GreenVest.pdf", "rb") as f:
+    st.download_button("📄 Télécharger le flyer GreenVest", f, file_name="Flyer GreenVest.pdf")
+
+# Affichage direct dans Streamlit (aperçu dans l'interface)
+with open("Flyer GreenVest.pdf", "rb") as f:
+    base64_pdf = f.read()
+
 @st.cache_data
 def load_and_clean_data(filepath):
     esg_data = pd.read_excel(filepath, sheet_name='Feuil1')
