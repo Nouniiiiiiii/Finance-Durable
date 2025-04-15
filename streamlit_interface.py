@@ -209,12 +209,12 @@ def display_visualizations(top_stocks, weights):
     st.subheader("📊 Visualisations du portefeuille")
     green_palette = [
         "#a5d6a7",  # vert doux mais plus soutenu
+        "#2e7d32",  # très foncé
         "#81c784",  # vert doux renforcé
         "#66bb6a",  # vert pro clair
         "#4caf50",  # vert ESG fort
         "#43a047",  # vert équilibré
         "#388e3c",  # vert foncé
-        "#2e7d32",  # très foncé
         "#1b5e20",  # vert profond
     ]
 
