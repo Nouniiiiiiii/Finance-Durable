@@ -3,6 +3,6 @@ pandas
 numpy
 matplotlib
 openpyxl
-pdfkit
+weasyprint
 os
 io
