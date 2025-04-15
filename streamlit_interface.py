@@ -27,15 +27,23 @@ plt.rcParams.update({
 })
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
-col1, col2 = st.columns([1, 5])
-with col1:
-    st.image("logo.jpeg", width=100)
+st.markdown("""
+<div style='text-align: center; padding: 20px 0;'>
 
-with col2:
-    st.markdown("""
-        <h1 style='margin-bottom: 0;'>Bienvenue sur <span style='color:#4CAF50;'>GreenVest</span></h1>
-        <p style='margin-top: 0;'>La plateforme d'investissement durable de Green Capital 🌱</p>
-    """, unsafe_allow_html=True)
+    <img src='logo.jpeg' width='100' style='border-radius: 12px; margin-bottom: 10px;' />
+
+    <h1 style='margin: 0; font-size: 2.5em; color: #1b1b1b;'>
+        Bienvenue sur <span style='color: #4CAF50;'>GreenVest</span>
+    </h1>
+
+    <p style='font-size: 1.1em; margin-top: 10px; color: #444; max-width: 650px; margin-left: auto; margin-right: auto;'>
+        Plateforme d'investissement durable développée par Green Capital 🌱<br>
+        Créez un portefeuille aligné avec vos valeurs en intégrant des critères ESG (Environnement, Social, Gouvernance),
+        tout en optimisant la performance selon vos préférences.
+    </p>
+
+</div>
+""", unsafe_allow_html=True)
 
 
 # Intro
