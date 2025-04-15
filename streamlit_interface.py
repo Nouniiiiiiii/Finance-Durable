@@ -388,15 +388,31 @@ if not filtered_stocks.empty:
 
     portfolio_returns, cumulative_returns, metrics = backtest_performance(portfolio_prices, weights)
     # Affichage du portefeuille
+    # 📈 Performance cumulée
     st.subheader("📈 Performance du portefeuille")
-    st.line_chart(cumulative_returns)
-
+    fig_perf, ax_perf = plt.subplots()
+    ax_perf.plot(cumulative_returns, color='green', linewidth=2)
+    ax_perf.set_title("Cumulative Return", fontsize=12)
+    ax_perf.set_ylabel("Performance")
+    st.pyplot(fig_perf)
+    
+    # 📉 Volatilité glissante
     rolling_vol = portfolio_returns.rolling(window=21).std() * np.sqrt(252)
-    st.subheader("Volatilité glissante (21 jours)")
-    st.line_chart(rolling_vol)
-
+    st.subheader("📉 Volatilité glissante (21 jours)")
+    fig_vol, ax_vol = plt.subplots()
+    ax_vol.plot(rolling_vol, color='green', linewidth=2)
+    ax_vol.set_title("Volatilité annualisée glissante", fontsize=12)
+    ax_vol.set_ylabel("Volatilité")
+    st.pyplot(fig_vol)
+    
+    # 📉 Drawdown
     st.subheader("📉 Drawdown (Max Perte Relative)")
-    st.line_chart(cumulative_returns / cumulative_returns.cummax() - 1)
+    drawdown = cumulative_returns / cumulative_returns.cummax() - 1
+    fig_dd, ax_dd = plt.subplots()
+    ax_dd.plot(drawdown, color='green', linewidth=2)
+    ax_dd.set_title("Drawdown", fontsize=12)
+    ax_dd.set_ylabel("Perte relative")
+    st.pyplot(fig_dd)
 
     st.subheader("📊 Métriques de performance")
     for k, v in metrics.items():
