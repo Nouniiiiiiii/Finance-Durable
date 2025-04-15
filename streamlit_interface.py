@@ -395,14 +395,14 @@ if not filtered_stocks.empty:
     vol_df = rolling_vol.reset_index()
     vol_df.columns = ['Date', 'Volatilité']
     st.subheader("Volatilité glissante (21 jours)")
-    st.line_chart(vol_df, x='Date', y='Volatilité', color=["#FFA726"])
+    st.line_chart(vol_df, x='Date', y='Volatilité', color=["#4CAF50"])
     
     # Drawdown
     drawdown = cumulative_returns / cumulative_returns.cummax() - 1
     drawdown_df = drawdown.reset_index()
     drawdown_df.columns = ['Date', 'Drawdown']
     st.subheader("📉 Drawdown (Max Perte Relative)")
-    st.line_chart(drawdown_df, x='Date', y='Drawdown', color=["#EF5350"])
+    st.line_chart(drawdown_df, x='Date', y='Drawdown', color=["#4CAF50"])
         
 
     st.subheader("📊 Métriques de performance")
