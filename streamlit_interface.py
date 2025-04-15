@@ -385,17 +385,14 @@ if not filtered_stocks.empty:
     portfolio_returns, cumulative_returns, metrics = backtest_performance(portfolio_prices, weights)
     # 📈 Performance du portefeuille
     st.subheader("📈 Performance du portefeuille")
-    st.line_chart(cumulative_returns.to_frame(name="Performance"), color=["green"])
-    
-    # Volatilité glissante
+    st.line_chart(cumulative_returns)
+
     rolling_vol = portfolio_returns.rolling(window=21).std() * np.sqrt(252)
     st.subheader("Volatilité glissante (21 jours)")
-    st.line_chart(rolling_vol.to_frame(name="Volatilité"), color=["green"])  # Tu peux aussi mettre une couleur ici
-    
-    # 📉 Drawdown (Max Perte Relative)
-    drawdown = cumulative_returns / cumulative_returns.cummax() - 1
+    st.line_chart(rolling_vol)
+
     st.subheader("📉 Drawdown (Max Perte Relative)")
-    st.line_chart(drawdown.to_frame(name="Drawdown"), color=["green"])
+    st.line_chart(cumulative_returns / cumulative_returns.cummax() - 1)
         
 
     st.subheader("📊 Métriques de performance")
