@@ -25,6 +25,12 @@ with open("Flyer GreenVest.pdf", "rb") as f:
 with open("Flyer GreenVest.pdf", "rb") as f:
     base64_pdf = f.read()
 
+# PDF viewer intégré
+import base64
+base64_pdf = base64.b64encode(base64_pdf).decode('utf-8')
+pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="600px" type="application/pdf"></iframe>'
+st.markdown(pdf_display, unsafe_allow_html=True)
+
 @st.cache_data
 def load_and_clean_data(filepath):
     esg_data = pd.read_excel(filepath, sheet_name='Feuil1')
