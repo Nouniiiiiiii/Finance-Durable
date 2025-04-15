@@ -1,0 +1,15 @@
+[theme]
+base = "light"
+
+# 💚 Couleur principale (tags, sliders, boutons...)
+primaryColor = "#4CAF50"            # Vert ESG (Material Design)
+
+# 🎨 Arrière-plans doux et naturels
+backgroundColor = "#f4f9f4"         # Vert très pâle (fond général)
+secondaryBackgroundColor = "#e1f3e1" # Vert clair (blocs latéraux, filtres)
+
+# 🖋️ Texte sombre mais doux
+textColor = "#1b1b1b"               # Gris presque noir (lisibilité + chaleur)
+
+# Pour les graphiques (facultatif via chart color=[])
+font = "sans serif"

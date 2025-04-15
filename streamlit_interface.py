@@ -6,17 +6,44 @@ import io
 import os
 import plotly.graph_objects as go 
 
+# 🌿 Thème vert clair harmonisé
+plt.style.use("default")
+plt.rcParams.update({
+    "axes.facecolor": "#f4f9f4",        # fond du plot
+    "figure.facecolor": "#f4f9f4",      # fond global
+    "axes.edgecolor": "#4CAF50",        # contour axes
+    "axes.labelcolor": "#1b1b1b",       # label axes
+    "xtick.color": "#1b1b1b",
+    "ytick.color": "#1b1b1b",
+    "text.color": "#1b1b1b",            # texte général
+    "axes.titleweight": "bold",
+    "axes.titlesize": 14,
+    "axes.labelsize": 12,
+    "lines.color": "#4CAF50",           # ligne principale
+    "lines.linewidth": 2,
+    "grid.color": "#e0e0e0",
+    "grid.linestyle": "--",
+    "grid.alpha": 0.5
+})
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
-# Intro
-st.title("🌱 Bienvenue sur GreenVest")
-st.markdown("""
-GreenVest est la plateforme de Green Capital dédiée à l'investissement durable.
+col1, col2 = st.columns([1, 5])
 
-Créez un portefeuille aligné avec vos valeurs en priorisant des critères ESG (Environnement, Social, Gouvernance), en excluant certaines industries, et en personnalisant vos préférences de performance.
+with col1:
+    st.markdown("<div style='padding-top: 40px;'>", unsafe_allow_html=True)  # Ajuste ce padding si besoin
+    st.image("logo.jpeg", width=140)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-Téléchargez ou visualisez notre flyer pour en savoir plus sur notre vision de la finance durable :
-""")
+with col2:
+    st.title("Bienvenue sur GreenVest")
+    st.markdown("""
+    GreenVest est la plateforme de Green Capital dédiée à l'investissement durable.
+
+    Créez un portefeuille aligné avec vos valeurs en priorisant des critères ESG (Environnement, Social, Gouvernance), en excluant certaines industries, et en personnalisant vos préférences de performance.
+
+    Téléchargez ou visualisez notre flyer pour en savoir plus sur notre vision de la finance durable :
+    """)
+
 
 # Affichage du flyer
 with open("Flyer GreenVest.pdf", "rb") as f:
@@ -188,6 +215,16 @@ def display_esg_criteria_and_sectors(top_stocks, weights):
 
 def display_visualizations(top_stocks, weights):
     st.subheader("📊 Visualisations du portefeuille")
+    green_palette = [
+        "#a5d6a7",  # vert doux mais plus soutenu
+        "#2e7d32",  # très foncé
+        "#81c784",  # vert doux renforcé
+        "#66bb6a",  # vert pro clair
+        "#4caf50",  # vert ESG fort
+        "#43a047",  # vert équilibré
+        "#388e3c",  # vert foncé
+        "#1b5e20",  # vert profond
+    ]
 
     # Aligner les index
     top_stocks = top_stocks.set_index('Ticker').loc[weights.index].copy()
@@ -200,7 +237,9 @@ def display_visualizations(top_stocks, weights):
     with col1:
         sector_weights = top_stocks.groupby('GICS_SECTOR_NAME')['Poids'].sum().sort_values(ascending=False)
         fig1, ax1 = plt.subplots(figsize=(8, 8))
-        ax1.pie(sector_weights, labels=sector_weights.index, autopct='%1.1f%%', startangle=90)
+        colors = green_palette[:len(sector_weights)]  # adapter au nombre de secteurs
+        ax1.pie(sector_weights, labels=sector_weights.index, autopct='%1.1f%%',
+                startangle=90, colors=colors, textprops={'color': '#1b1b1b'})
         ax1.axis('equal')
         plt.tight_layout()
         st.pyplot(fig1)
@@ -208,10 +247,13 @@ def display_visualizations(top_stocks, weights):
     with col2:
         geo_weights = top_stocks.groupby('Marché')['Poids'].sum().sort_values(ascending=False)
         fig2, ax2 = plt.subplots(figsize=(8, 8))
-        ax2.pie(geo_weights, labels=geo_weights.index, autopct='%1.1f%%', startangle=90)
+        colors = green_palette[:len(geo_weights)]  # adapter au nombre de zones géo
+        ax2.pie(geo_weights, labels=geo_weights.index, autopct='%1.1f%%',
+                startangle=90, colors=colors, textprops={'color': '#1b1b1b'})
         ax2.axis('equal')
         plt.tight_layout()
         st.pyplot(fig2)
+
 
     # --- Score ESG pondéré par entreprise ---
     st.markdown("### Score ESG pondéré par entreprise")
@@ -384,15 +426,25 @@ if not filtered_stocks.empty:
 
     portfolio_returns, cumulative_returns, metrics = backtest_performance(portfolio_prices, weights)
     # 📈 Performance du portefeuille
+    # Performance du portefeuille
     st.subheader("📈 Performance du portefeuille")
-    st.line_chart(cumulative_returns)
-
+    perf_df = cumulative_returns.reset_index()  # remet l'index datetime en colonne
+    perf_df.columns = ['Date', 'Performance']
+    st.line_chart(perf_df, x='Date', y='Performance', color=["#4CAF50"])
+    
+    # Volatilité glissante
     rolling_vol = portfolio_returns.rolling(window=21).std() * np.sqrt(252)
+    vol_df = rolling_vol.reset_index()
+    vol_df.columns = ['Date', 'Volatilité']
     st.subheader("Volatilité glissante (21 jours)")
-    st.line_chart(rolling_vol)
-
+    st.line_chart(vol_df, x='Date', y='Volatilité', color=["#4CAF50"])
+    
+    # Drawdown
+    drawdown = cumulative_returns / cumulative_returns.cummax() - 1
+    drawdown_df = drawdown.reset_index()
+    drawdown_df.columns = ['Date', 'Drawdown']
     st.subheader("📉 Drawdown (Max Perte Relative)")
-    st.line_chart(cumulative_returns / cumulative_returns.cummax() - 1)
+    st.line_chart(drawdown_df, x='Date', y='Drawdown', color=["#4CAF50"])
         
 
     st.subheader("📊 Métriques de performance")
