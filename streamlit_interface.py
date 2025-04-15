@@ -208,15 +208,16 @@ def display_esg_criteria_and_sectors(top_stocks, weights):
 def display_visualizations(top_stocks, weights):
     st.subheader("📊 Visualisations du portefeuille")
     green_palette = [
-        "#e8f5e9",  # vert très pâle
-        "#c8e6c9",  # vert doux pastel
-        "#a5d6a7",  # vert léger
-        "#81c784",  # vert normal
-        "#66bb6a",  # vert pro
+        "#a5d6a7",  # vert doux mais plus soutenu
+        "#81c784",  # vert doux renforcé
+        "#66bb6a",  # vert pro clair
         "#4caf50",  # vert ESG fort
+        "#43a047",  # vert équilibré
         "#388e3c",  # vert foncé
         "#2e7d32",  # très foncé
+        "#1b5e20",  # vert profond
     ]
+
     # Aligner les index
     top_stocks = top_stocks.set_index('Ticker').loc[weights.index].copy()
     top_stocks['Poids'] = weights
