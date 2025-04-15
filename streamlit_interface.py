@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import io
 import os
+import plotly.graph_objects as go 
 
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
@@ -375,11 +376,6 @@ weights_config = {
     'w_vol': w_vol
     }
 
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-
 
 filtered_stocks = filter_stocks(esg_data, metrics_df, filters, thematic_column_map)
 if not filtered_stocks.empty:
@@ -387,24 +383,26 @@ if not filtered_stocks.empty:
     st.markdown(f"🧠 Construction du portefeuille optimisé selon le critère : **{selected_theme}**")
 
     portfolio_returns, cumulative_returns, metrics = backtest_performance(portfolio_prices, weights)
-    # Affichage du portefeuille
-    # 📈 Performance cumulée    
+    # 📈 Performance du portefeuille
     st.subheader("📈 Performance du portefeuille")
-    fig1, ax1 = plt.subplots()
-    ax1.plot(cumulative_returns, color='green')
-    st.pyplot(fig1)
+    fig1 = go.Figure()
+    fig1.add_trace(go.Scatter(y=cumulative_returns, mode='lines', line=dict(color='green')))
+    st.plotly_chart(fig1, use_container_width=True)
     
+    # 📉 Volatilité glissante (21 jours)
     rolling_vol = portfolio_returns.rolling(window=21).std() * np.sqrt(252)
     st.subheader("Volatilité glissante (21 jours)")
-    fig2, ax2 = plt.subplots()
-    ax2.plot(rolling_vol, color='green')
-    st.pyplot(fig2)
+    fig2 = go.Figure()
+    fig2.add_trace(go.Scatter(y=rolling_vol, mode='lines', line=dict(color='green')))
+    st.plotly_chart(fig2, use_container_width=True)
     
+    # 📉 Drawdown (Max Perte Relative)
     st.subheader("📉 Drawdown (Max Perte Relative)")
-    fig3, ax3 = plt.subplots()
-    ax3.plot(cumulative_returns / cumulative_returns.cummax() - 1, color='green')
-    st.pyplot(fig3)
-
+    drawdown = cumulative_returns / cumulative_returns.cummax() - 1
+    fig3 = go.Figure()
+    fig3.add_trace(go.Scatter(y=drawdown, mode='lines', line=dict(color='green')))
+    st.plotly_chart(fig3, use_container_width=True)
+    
 
     st.subheader("📊 Métriques de performance")
     for k, v in metrics.items():
