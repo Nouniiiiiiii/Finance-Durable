@@ -208,6 +208,12 @@ def display_esg_criteria_and_sectors(top_stocks, weights):
 def display_visualizations(top_stocks, weights):
     st.subheader("📊 Visualisations du portefeuille")
 
+    # Palette GreenVest (du clair au foncé)
+    green_palette = [
+        "#f4f9f4", "#e1f3e1", "#a5d6a7",
+        "#81c784", "#66bb6a", "#4caf50", "#388e3c"
+    ]
+
     # Aligner les index
     top_stocks = top_stocks.set_index('Ticker').loc[weights.index].copy()
     top_stocks['Poids'] = weights
@@ -219,7 +225,9 @@ def display_visualizations(top_stocks, weights):
     with col1:
         sector_weights = top_stocks.groupby('GICS_SECTOR_NAME')['Poids'].sum().sort_values(ascending=False)
         fig1, ax1 = plt.subplots(figsize=(8, 8))
-        ax1.pie(sector_weights, labels=sector_weights.index, autopct='%1.1f%%', startangle=90)
+        colors = green_palette[:len(sector_weights)]  # adapter au nombre de secteurs
+        ax1.pie(sector_weights, labels=sector_weights.index, autopct='%1.1f%%',
+                startangle=90, colors=colors, textprops={'color': '#1b1b1b'})
         ax1.axis('equal')
         plt.tight_layout()
         st.pyplot(fig1)
@@ -227,10 +235,13 @@ def display_visualizations(top_stocks, weights):
     with col2:
         geo_weights = top_stocks.groupby('Marché')['Poids'].sum().sort_values(ascending=False)
         fig2, ax2 = plt.subplots(figsize=(8, 8))
-        ax2.pie(geo_weights, labels=geo_weights.index, autopct='%1.1f%%', startangle=90)
+        colors = green_palette[:len(geo_weights)]  # adapter au nombre de zones géo
+        ax2.pie(geo_weights, labels=geo_weights.index, autopct='%1.1f%%',
+                startangle=90, colors=colors, textprops={'color': '#1b1b1b'})
         ax2.axis('equal')
         plt.tight_layout()
         st.pyplot(fig2)
+
 
     # --- Score ESG pondéré par entreprise ---
     st.markdown("### Score ESG pondéré par entreprise")
