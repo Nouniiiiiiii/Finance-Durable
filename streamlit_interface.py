@@ -192,23 +192,24 @@ def display_visualizations(top_stocks, weights):
     top_stocks = top_stocks.set_index('Ticker').loc[weights.index].copy()
     top_stocks['Poids'] = weights
 
-    # --- Répartition sectorielle et géographique côte à côte ---
     st.markdown("### Répartition sectorielle et géographique")
 
     col1, col2 = st.columns(2)
 
     with col1:
         sector_weights = top_stocks.groupby('GICS_SECTOR_NAME')['Poids'].sum().sort_values(ascending=False)
-        fig1, ax1 = plt.subplots(figsize=(3.5, 3.5))  # plus compact
+        fig1, ax1 = plt.subplots(figsize=(5, 5))
         ax1.pie(sector_weights, labels=sector_weights.index, autopct='%1.1f%%', startangle=90)
         ax1.axis('equal')
+        plt.tight_layout()
         st.pyplot(fig1)
 
     with col2:
         geo_weights = top_stocks.groupby('Marché')['Poids'].sum().sort_values(ascending=False)
-        fig2, ax2 = plt.subplots(figsize=(3.5, 3.5))  # idem
+        fig2, ax2 = plt.subplots(figsize=(5, 5))
         ax2.pie(geo_weights, labels=geo_weights.index, autopct='%1.1f%%', startangle=90)
         ax2.axis('equal')
+        plt.tight_layout()
         st.pyplot(fig2)
 
     # --- Score ESG pondéré par entreprise ---
