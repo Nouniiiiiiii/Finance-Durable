@@ -198,7 +198,7 @@ def display_visualizations(top_stocks, weights):
 
     with col1:
         sector_weights = top_stocks.groupby('GICS_SECTOR_NAME')['Poids'].sum().sort_values(ascending=False)
-        fig1, ax1 = plt.subplots(figsize=(5, 5))
+        fig1, ax1 = plt.subplots(figsize=(8, 8))
         ax1.pie(sector_weights, labels=sector_weights.index, autopct='%1.1f%%', startangle=90)
         ax1.axis('equal')
         plt.tight_layout()
@@ -206,7 +206,7 @@ def display_visualizations(top_stocks, weights):
 
     with col2:
         geo_weights = top_stocks.groupby('Marché')['Poids'].sum().sort_values(ascending=False)
-        fig2, ax2 = plt.subplots(figsize=(5, 5))
+        fig2, ax2 = plt.subplots(figsize=(8, 8))
         ax2.pie(geo_weights, labels=geo_weights.index, autopct='%1.1f%%', startangle=90)
         ax2.axis('equal')
         plt.tight_layout()
