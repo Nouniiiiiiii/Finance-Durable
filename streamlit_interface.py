@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import io
 
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
@@ -136,17 +137,34 @@ def display_esg_criteria_and_sectors(top_stocks, weights):
     # 🏢 Affichage des informations des entreprises sélectionnées
     st.subheader("🏢 Détails des entreprises sélectionnées")
 
-    display_df = top_stocks[['NAME', 'GICS_SECTOR_NAME', 'Marché']].copy()
+    display_df = top_stocks[[
+        'NAME', 'GICS_SECTOR_NAME', 'Marché', 'ESG_SCORE', 'Annual Return', 'Annual Volatility'
+    ]].copy()
+
     display_df['Poids dans le portefeuille (%)'] = (weights * 100).round(2).values
+    display_df['Annual Return'] = (display_df['Annual Return'] * 100).round(2)
+    display_df['Annual Volatility'] = (display_df['Annual Volatility'] * 100).round(2)
 
     display_df = display_df.rename(columns={
         'NAME': 'Nom',
         'GICS_SECTOR_NAME': 'Secteur',
-        'Marché': 'Zone géographique'
+        'Marché': 'Zone géographique',
+        'ESG_SCORE': 'Score ESG',
+        'Annual Return': 'Rendement annuel (%)',
+        'Annual Volatility': 'Volatilité (%)'
     })
-
     # Affichage dans un tableau
     st.dataframe(display_df.reset_index(drop=True), use_container_width=True)
+
+    csv = display_df.to_csv(index=False).encode('utf-8')
+    
+    st.download_button(
+       "Press to Download",
+       csv,
+       "file.csv",
+       "text/csv",
+       key='download-csv'
+    )
 
 
 def display_visualizations(top_stocks, weights):
@@ -368,5 +386,7 @@ if not filtered_stocks.empty:
     # Affichage ESG et secteurs
     display_esg_criteria_and_sectors(top_stocks, weights)
     display_visualizations(top_stocks, weights)
+
+
 else:
     st.warning("Aucune entreprise ne correspond aux critères sélectionnés.")
