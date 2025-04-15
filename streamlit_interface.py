@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import io
+import os
 
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
@@ -165,7 +166,6 @@ def display_esg_criteria_and_sectors(top_stocks, weights):
        "text/csv",
        key='download-csv'
     )
-
 
 def display_visualizations(top_stocks, weights):
     st.subheader("📊 Visualisations du portefeuille")
