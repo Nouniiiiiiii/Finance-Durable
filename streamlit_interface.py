@@ -4,8 +4,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 import io
 import os
+import plotly.graph_objects as go 
 
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
+
+# Intro
+st.title("🌱 Bienvenue sur GreenVest")
+st.markdown("""
+GreenVest est la plateforme de Green Capital dédiée à l'investissement durable.
+
+Créez un portefeuille aligné avec vos valeurs en priorisant des critères ESG (Environnement, Social, Gouvernance), en excluant certaines industries, et en personnalisant vos préférences de performance.
+
+Téléchargez ou visualisez notre flyer pour en savoir plus sur notre vision de la finance durable :
+""")
+
+# Affichage du flyer
+with open("Flyer GreenVest.pdf", "rb") as f:
+    st.download_button("📄 Télécharger le flyer GreenVest", f, file_name="Flyer GreenVest.pdf")
+
+# Affichage direct dans Streamlit (aperçu dans l'interface)
+with open("Flyer GreenVest.pdf", "rb") as f:
+    base64_pdf = f.read()
 
 @st.cache_data
 def load_and_clean_data(filepath):
@@ -174,23 +193,24 @@ def display_visualizations(top_stocks, weights):
     top_stocks = top_stocks.set_index('Ticker').loc[weights.index].copy()
     top_stocks['Poids'] = weights
 
-    # --- Répartition sectorielle et géographique côte à côte ---
     st.markdown("### Répartition sectorielle et géographique")
 
     col1, col2 = st.columns(2)
 
     with col1:
         sector_weights = top_stocks.groupby('GICS_SECTOR_NAME')['Poids'].sum().sort_values(ascending=False)
-        fig1, ax1 = plt.subplots(figsize=(3.5, 3.5))  # plus compact
+        fig1, ax1 = plt.subplots(figsize=(8, 8))
         ax1.pie(sector_weights, labels=sector_weights.index, autopct='%1.1f%%', startangle=90)
         ax1.axis('equal')
+        plt.tight_layout()
         st.pyplot(fig1)
 
     with col2:
         geo_weights = top_stocks.groupby('Marché')['Poids'].sum().sort_values(ascending=False)
-        fig2, ax2 = plt.subplots(figsize=(3.5, 3.5))  # idem
+        fig2, ax2 = plt.subplots(figsize=(8, 8))
         ax2.pie(geo_weights, labels=geo_weights.index, autopct='%1.1f%%', startangle=90)
         ax2.axis('equal')
+        plt.tight_layout()
         st.pyplot(fig2)
 
     # --- Score ESG pondéré par entreprise ---
@@ -356,11 +376,6 @@ weights_config = {
     'w_vol': w_vol
     }
 
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-
 
 filtered_stocks = filter_stocks(esg_data, metrics_df, filters, thematic_column_map)
 if not filtered_stocks.empty:
@@ -368,7 +383,7 @@ if not filtered_stocks.empty:
     st.markdown(f"🧠 Construction du portefeuille optimisé selon le critère : **{selected_theme}**")
 
     portfolio_returns, cumulative_returns, metrics = backtest_performance(portfolio_prices, weights)
-    # Affichage du portefeuille
+    # 📈 Performance du portefeuille
     st.subheader("📈 Performance du portefeuille")
     st.line_chart(cumulative_returns)
 
@@ -378,6 +393,7 @@ if not filtered_stocks.empty:
 
     st.subheader("📉 Drawdown (Max Perte Relative)")
     st.line_chart(cumulative_returns / cumulative_returns.cummax() - 1)
+        
 
     st.subheader("📊 Métriques de performance")
     for k, v in metrics.items():
