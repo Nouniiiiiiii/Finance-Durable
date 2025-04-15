@@ -31,7 +31,7 @@ col1, col2 = st.columns([1, 5])
 
 with col1:
     st.markdown("<div style='padding-top: 50px;'>", unsafe_allow_html=True)  # Ajuste ce padding si besoin
-    st.image("logo.jpeg", width=100)
+    st.image("logo.jpeg", width=150)
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col2:
