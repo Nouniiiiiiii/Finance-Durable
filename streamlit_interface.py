@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import io
+import pdfkit
+import os
 
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
@@ -166,6 +168,26 @@ def display_esg_criteria_and_sectors(top_stocks, weights):
        key='download-csv'
     )
 
+    # 📄 Export PDF (HTML → PDF)
+    if st.button("📄 Générer un rapport PDF"):
+        html = generate_html_report(display_df, metrics)
+
+        # Créer un fichier temporaire
+        with open("rapport_temp.html", "w", encoding="utf-8") as f:
+            f.write(html)
+
+        pdf_path = "rapport_portefeuille.pdf"
+        pdfkit.from_file("rapport_temp.html", pdf_path)
+
+        with open(pdf_path, "rb") as f:
+            st.download_button(
+                label="📥 Télécharger le rapport PDF",
+                data=f.read(),
+                file_name="rapport_portefeuille.pdf",
+                mime="application/pdf"
+            )
+
+
 
 def display_visualizations(top_stocks, weights):
     st.subheader("📊 Visualisations du portefeuille")
@@ -203,6 +225,22 @@ def display_visualizations(top_stocks, weights):
     ax3.set_title("Score ESG pondéré par titre")
     ax3.set_xticklabels(ax3.get_xticklabels(), rotation=45, ha='right')  
     st.pyplot(fig3)
+
+def generate_html_report(df, metrics, title="Rapport du portefeuille durable"):
+    html = f"<html><head><meta charset='utf-8'><style>table {{ border-collapse: collapse; width: 100%; }} th, td {{ border: 1px solid #ccc; padding: 8px; text-align: left; }}</style></head><body>"
+    
+    html += f"<h1>{title}</h1>"
+
+    html += "<h2>📊 Métriques de performance</h2><ul>"
+    for k, v in metrics.items():
+        html += f"<li><b>{k}</b> : {v:.2f}</li>"
+    html += "</ul>"
+
+    html += "<h2>🏢 Détails des entreprises sélectionnées</h2>"
+    html += df.to_html(index=False)
+
+    html += "</body></html>"
+    return html
 
 
 # Streamlit Interface
