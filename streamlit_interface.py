@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import io
 import os
 
+st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
+
 st.markdown("""
     <style>
     /* Fond vert clair */
@@ -42,9 +44,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-
-st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
 # Intro
 st.title("🌱 Bienvenue sur GreenVest")
