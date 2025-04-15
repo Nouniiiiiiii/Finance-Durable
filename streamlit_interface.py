@@ -385,23 +385,15 @@ if not filtered_stocks.empty:
     portfolio_returns, cumulative_returns, metrics = backtest_performance(portfolio_prices, weights)
     # 📈 Performance du portefeuille
     st.subheader("📈 Performance du portefeuille")
-    fig1 = go.Figure()
-    fig1.add_trace(go.Scatter(y=cumulative_returns, mode='lines', line=dict(color='green')))
-    st.plotly_chart(fig1, use_container_width=True)
-    
-    # 📉 Volatilité glissante (21 jours)
+    st.line_chart(cumulative_returns, color="green")
+
     rolling_vol = portfolio_returns.rolling(window=21).std() * np.sqrt(252)
     st.subheader("Volatilité glissante (21 jours)")
-    fig2 = go.Figure()
-    fig2.add_trace(go.Scatter(y=rolling_vol, mode='lines', line=dict(color='green')))
-    st.plotly_chart(fig2, use_container_width=True)
-    
-    # 📉 Drawdown (Max Perte Relative)
+    st.line_chart(rolling_vol)
+
     st.subheader("📉 Drawdown (Max Perte Relative)")
-    drawdown = cumulative_returns / cumulative_returns.cummax() - 1
-    fig3 = go.Figure()
-    fig3.add_trace(go.Scatter(y=drawdown, mode='lines', line=dict(color='green')))
-    st.plotly_chart(fig3, use_container_width=True)
+    st.line_chart(cumulative_returns / cumulative_returns.cummax() - 1)
+
     
 
     st.subheader("📊 Métriques de performance")
