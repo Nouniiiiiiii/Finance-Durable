@@ -5,6 +5,45 @@ import matplotlib.pyplot as plt
 import io
 import os
 
+st.markdown("""
+    <style>
+    /* Fond vert clair */
+    .stApp {
+        background-color: #e6f2e6;
+    }
+
+    /* Titres plus élégants */
+    h1, h2, h3, h4 {
+        color: #2e7d32;
+    }
+
+    /* Boutons personnalisés */
+    .stButton>button {
+        background-color: #4caf50;
+        color: white;
+        border-radius: 8px;
+        padding: 0.6em 1em;
+        font-weight: bold;
+    }
+    .stButton>button:hover {
+        background-color: #388e3c;
+        color: white;
+    }
+
+    /* Boîtes latérales */
+    .css-1d391kg {  /* sidebar */
+        background-color: #d0ecd0;
+    }
+
+    /* Graphes centrés */
+    .element-container:has(iframe) {
+        display: flex;
+        justify-content: center;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
 # Intro
