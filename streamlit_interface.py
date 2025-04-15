@@ -26,6 +26,8 @@ plt.rcParams.update({
     "grid.alpha": 0.5
 })
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
+st.image("logo.jpeg", width=200)  # ou logo.png si tu convertis
+
 
 # Intro
 st.title("🌱 Bienvenue sur GreenVest")
