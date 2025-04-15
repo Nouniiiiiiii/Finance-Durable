@@ -27,15 +27,20 @@ plt.rcParams.update({
 })
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 
-# Intro
-st.title("🌱 Bienvenue sur GreenVest")
-st.markdown("""
-GreenVest est la plateforme de Green Capital dédiée à l'investissement durable.
+col1, col2 = st.columns([1, 5])
 
-Créez un portefeuille aligné avec vos valeurs en priorisant des critères ESG (Environnement, Social, Gouvernance), en excluant certaines industries, et en personnalisant vos préférences de performance.
+with col1:
+    st.image("logo.jpeg", width=100)  # Assure-toi que le fichier est bien nommé/logo converti
 
-Téléchargez ou visualisez notre flyer pour en savoir plus sur notre vision de la finance durable :
-""")
+with col2:
+    st.title("🌱 Bienvenue sur GreenVest")
+    st.markdown("""
+    GreenVest est la plateforme de Green Capital dédiée à l'investissement durable.
+
+    Créez un portefeuille aligné avec vos valeurs en priorisant des critères ESG (Environnement, Social, Gouvernance), en excluant certaines industries, et en personnalisant vos préférences de performance.
+
+    Téléchargez ou visualisez notre flyer pour en savoir plus sur notre vision de la finance durable :
+    """)
 
 # Affichage du flyer
 with open("Flyer GreenVest.pdf", "rb") as f:
