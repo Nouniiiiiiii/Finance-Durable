@@ -26,7 +26,16 @@ plt.rcParams.update({
     "grid.alpha": 0.5
 })
 st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
-st.image("logo.jpeg", width=200)  # ou logo.png si tu convertis
+
+col1, col2 = st.columns([1, 5])
+with col1:
+    st.image("logo.jpeg", width=100)
+
+with col2:
+    st.markdown("""
+        <h1 style='margin-bottom: 0;'>Bienvenue sur <span style='color:#4CAF50;'>GreenVest</span></h1>
+        <p style='margin-top: 0;'>La plateforme d'investissement durable de Green Capital 🌱</p>
+    """, unsafe_allow_html=True)
 
 
 # Intro
