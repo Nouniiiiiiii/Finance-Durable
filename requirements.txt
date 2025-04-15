@@ -3,3 +3,6 @@ pandas
 numpy
 matplotlib
 openpyxl
+pdfkit
+os
+io
