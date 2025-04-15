@@ -207,7 +207,7 @@ def display_esg_criteria_and_sectors(top_stocks, weights):
 
 def display_visualizations(top_stocks, weights):
     st.subheader("📊 Visualisations du portefeuille")
-    green_finance_palette = [
+    green_palette = [
         "#e8f5e9",  # vert très pâle
         "#c8e6c9",  # vert doux pastel
         "#a5d6a7",  # vert léger
