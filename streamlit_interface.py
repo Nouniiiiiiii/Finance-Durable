@@ -30,7 +30,9 @@ st.set_page_config(page_title="Portefeuille Durable 📊🌿", layout='wide')
 col1, col2 = st.columns([1, 5])
 
 with col1:
-    st.image("logo.jpeg", width=100)  # Assure-toi que le fichier est bien nommé/logo converti
+    st.markdown("<div style='padding-top: 35px;'>", unsafe_allow_html=True)  # Ajuste ce padding si besoin
+    st.image("logo.jpeg", width=100)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 with col2:
     st.title("🌱 Bienvenue sur GreenVest")
@@ -41,6 +43,7 @@ with col2:
 
     Téléchargez ou visualisez notre flyer pour en savoir plus sur notre vision de la finance durable :
     """)
+
 
 # Affichage du flyer
 with open("Flyer GreenVest.pdf", "rb") as f:
